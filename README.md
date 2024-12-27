@@ -8,5 +8,4 @@ This project is designed to manage user tasks, this project is written on the Fa
 [Task Management System](https://github.com/necto128/Projects/tree/Task-Management-System/Task%20Management%20System).
 
 ## Project 2: Coin Base
-...
-[Coin Base]([https://github.com/necto128/Projects/tree/main](https://github.com/necto128/Projects/tree/Coin-Base)).
+[Coin Base](https://github.com/necto128/Projects/tree/Coin-Base).
