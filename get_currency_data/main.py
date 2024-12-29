@@ -19,4 +19,4 @@ async def startup_event():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=os.getenv("HOST"), port=int(os.getenv("PORT")))
+    uvicorn.run(app, host=os.getenv("APP_HOST"), port=int(os.getenv("APP_PORT")))
