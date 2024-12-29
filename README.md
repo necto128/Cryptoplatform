@@ -10,4 +10,4 @@ This project is designed to manage user tasks, this project is written on the Fa
 ## Project 2: Coin Base
 [Coin Base](https://github.com/necto128/Projects/tree/Coin-Base) is a microservices project where the **Coin Base** service serves as the main application for managing and analyzing cryptocurrency data. 
 
-The **get_currency_data** microservice, built with FastAPI, is responsible for fetching real-time data from various cryptocurrency exchanges. It retrieves and aggregates market data, sending it via Kafka to the main **Coin Base** service, ensuring users have access to the latest market information in a seamless manner.
+The **Get currency data** microservice, built with FastAPI, is responsible for fetching real-time data from various cryptocurrency exchanges. It retrieves and aggregates market data, sending it via Kafka to the main **Coin Base** service, ensuring users have access to the latest market information in a seamless manner.
