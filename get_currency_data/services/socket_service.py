@@ -20,7 +20,7 @@ async def teke_crypto(producer, message_data):
         'name': getting_crypt_info['name'].values[0],
         'value': message_data['p'],
     }
-    await producer.send_and_wait('my_topic', value=message)
+    await producer.send_and_wait(os.getenv('KAFKA_QUEUE'), value=message)
 
 
 async def crypto_websocket():
