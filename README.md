@@ -31,4 +31,3 @@
 ## Getting Started
 
 To get started with these projects, clone the repository and follow the setup instructions provided in each project's directory.
-
