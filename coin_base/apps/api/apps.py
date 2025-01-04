@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class CryptoPlatformConfig(AppConfig):
+class ApiConfig(AppConfig):
+    """ApiConfig."""
     default_auto_field = "django.db.models.BigAutoField"
-    name = "crypto_platform"
+    name = "apps.api"

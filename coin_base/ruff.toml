@@ -1,0 +1,21 @@
+target-version = "py310"
+line-length = 120
+
+exclude = [
+    "*/migrations/*",
+    "venv/",
+    "__init__.py",
+    "tests/",
+    "src/",
+    "migrations/*",
+    "templates/"
+]
+
+[lint]
+extend-select = [
+    "E", "F", "I", "C", "B", "N", "S", "D", "A", "W", "B9"
+]
+ignore = ["D100", "I001","D104"]
+
+[lint.pydocstyle]
+convention = "google"
