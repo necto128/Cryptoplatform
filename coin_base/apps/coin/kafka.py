@@ -1,9 +1,10 @@
-import asyncio
 import json
 import os
-from dotenv import load_dotenv
-from confluent_kafka import Consumer, KafkaException
+
 from asgiref.sync import sync_to_async
+from confluent_kafka import Consumer, KafkaException
+from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -17,7 +18,6 @@ async def consume_messages():
     })
     consumer.subscribe([os.getenv("KAFKA_QUEUE")])
     try:
-        inx = 0
         while True:
             msg = consumer.poll(1.0)
             if msg is None:
@@ -25,14 +25,13 @@ async def consume_messages():
             if msg.error():
                 raise KafkaException(msg.error())
             message = json.loads(msg.value().decode('utf-8'))
+            print(message)
             directive = await sync_to_async(Directive.objects.get)(key=message.get('key'))
+            directive.price24h = message.get('p24h')
+            await sync_to_async(directive.save)()
             await sync_to_async(PriceHistory.objects.create)(
                 directive=directive,
                 value=message.get('value')
             )
-            inx += 1
-            if inx == 10:
-                await asyncio.sleep(10)
-                inx = 0
     finally:
         consumer.close()

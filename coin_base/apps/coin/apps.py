@@ -1,8 +1,8 @@
 from django.apps import AppConfig
 
+import asyncio
+from apps.coin.kafka import consume_messages
 
-# import asyncio
-# from apps.coin.kafka import consume_messages
 
 class CoinConfig(AppConfig):
     """CoinConfig."""
@@ -11,6 +11,5 @@ class CoinConfig(AppConfig):
 
     def ready(self):
         """Ready Option."""
-        ...
-        # loop = asyncio.get_event_loop()
-        # loop.create_task(consume_messages())
+        loop = asyncio.get_event_loop()
+        loop.create_task(consume_messages())
