@@ -6,7 +6,9 @@ class Directive(models.Model):
     key = models.IntegerField(primary_key=True)
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
+    price24h = models.DecimalField(max_digits=20, decimal_places=10, default=0)
     is_active = models.BooleanField(default=False)
+
 
 class PriceHistory(models.Model):
     """PriceHistory model."""
