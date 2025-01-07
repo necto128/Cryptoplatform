@@ -13,14 +13,16 @@ load_dotenv()
 async def teke_crypto(producer, message_data):
     """Kafka message tagging function for the main service."""
     df = pd.read_csv('crypto_base.csv')
-    getting_crypt_info = df[df["id"] == message_data["id"]]
-    message = {
-        'key': message_data['id'],
-        'symbol': getting_crypt_info['symbol'].values[0],
-        'name': getting_crypt_info['name'].values[0],
-        'value': message_data['p'],
-    }
-    await producer.send_and_wait(os.getenv('KAFKA_QUEUE'), value=message)
+    for mes in message_data:
+        getting_crypt_info = df[df["id"] == mes["id"]]
+        message = {
+            'key': mes['id'],
+            'symbol': getting_crypt_info['symbol'].values[0],
+            'name': getting_crypt_info['name'].values[0],
+            'p24h': mes['p24h'],
+            'value': mes['p'],
+        }
+        await producer.send_and_wait(os.getenv('KAFKA_QUEUE'), value=message)
 
 
 async def crypto_websocket():
@@ -34,15 +36,17 @@ async def crypto_websocket():
     )
     await producer.start()
     async with websockets.connect(WebSocketResource.WS_CRYPTO) as websocket:
-        print("Websockets connect")
         await websocket.send(json.dumps(WebSocketResource.message_call_5s_normal))
+        record_list = []
         while True:
             try:
                 message = await websocket.recv()
                 message_data = json.loads(message).get("d")
                 if message_data:
-                    await teke_crypto(producer, message_data)
+                    record_list.append(message_data)
+                    if len(record_list) >= 100:
+                        await teke_crypto(producer, record_list)
+                        record_list.clear()
             except websockets.ConnectionClosed:
-                print("Websockets connect close")
                 await producer.stop()
                 break
