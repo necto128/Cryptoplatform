@@ -25,7 +25,6 @@ async def consume_messages():
             if msg.error():
                 raise KafkaException(msg.error())
             message = json.loads(msg.value().decode('utf-8'))
-            print(message)
             directive = await sync_to_async(Directive.objects.get)(key=message.get('key'))
             directive.price24h = message.get('p24h')
             await sync_to_async(directive.save)()
