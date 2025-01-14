@@ -15,7 +15,7 @@ exclude = [
 extend-select = [
     "E", "F", "I", "C", "B", "N", "S", "D", "A", "W", "B9"
 ]
-ignore = ["D100", "I001","D104"]
+ignore = ["D100", "I001","D104", "S101"]
 
 [lint.pydocstyle]
 convention = "google"
