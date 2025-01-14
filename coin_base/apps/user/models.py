@@ -6,7 +6,6 @@ class Profile(models.Model):
     """This is the Profile model. It represents the profile of a registered user."""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
-
 class CryptoWallet(models.Model):
     """This is the CryptoWallet model. It represents a cryptocurrency wallet for a user."""
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='wallets')
