@@ -1,4 +1,4 @@
-from apps.user.serializers import UserSerializer, UserPasswordSerializer
+from apps.user.serializers.user import UserSerializer, UserPasswordSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -30,7 +30,7 @@ class EditPasswordView(APIView):
 
     @swagger_auto_schema(tags=['User'])
     def patch(self, request):
-        """Return a list of all users."""
+        """Сhanges the password."""
         password = UserPasswordSerializer(data=request.data)
         password.is_valid(raise_exception=True)
         user = request.user

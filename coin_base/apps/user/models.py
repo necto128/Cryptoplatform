@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from apps.coin.models import Directive
 
 class Profile(models.Model):
     """This is the Profile model. It represents the profile of a registered user."""
@@ -18,6 +18,6 @@ class CryptoWallet(models.Model):
 class WalletBalance(models.Model):
     """This model represents the balance of a specific currency in a user's wallet."""
     wallet = models.ForeignKey(CryptoWallet, on_delete=models.CASCADE, related_name='balances')
-    currency = models.CharField(max_length=10)
+    currency = models.ForeignKey(Directive, on_delete=models.DO_NOTHING, related_name='wallet_balance')
     balance = models.DecimalField(max_digits=20, decimal_places=8, default=0)
 
