@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.user.serializers import UserSerializer, UserPasswordSerializer
+from apps.user.serializers.user import UserSerializer, UserPasswordSerializer
 from apps.user.tasks import send_password_reset_email_celery_task
 from apps.utils import generate_password
 from apps.utils import ping_celery_redis

@@ -16,7 +16,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 SECRET_KEY = os.getenv("SECRET_KEY")
 # DEBUG = os.getenv("DEBUG") and True
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
