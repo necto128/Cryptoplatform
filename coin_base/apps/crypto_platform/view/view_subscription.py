@@ -21,7 +21,7 @@ class SubscriptionDirectiveView(APIView):
         data, user = request.data, request.user
         serializer = CreateSubscriptionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        user.profile.subscribe(serializer.data)
+        user.subscriptions.create_subscribe(serializer.data)
         return Response(
             status=status.HTTP_201_CREATED,
             data={"Message": "Successfully subscription!"}
@@ -37,7 +37,7 @@ class SubscriptionDirectiveView(APIView):
         data, user = request.data, request.user
         serializer = SubscriptionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        user.profile.unsubscribe(serializer.data)
+        user.subscriptions.unsubscribe(serializer.data)
         return Response(
             status=status.HTTP_200_OK,
             data={"Message": "Successfully unsubscription!"}
@@ -51,7 +51,7 @@ class SubscriptionDirectiveView(APIView):
     def get(self, request):
         """Create subscription on directive."""
         user = request.user
-        list_subscriptions = user.profile.get_subscriptions()
+        list_subscriptions = user.subscriptions.get_subscriptions()
         directives = [sub.directive for sub in list_subscriptions]
         serializer = SubscriptionSerializer(directives, many=True)
         return Response(
