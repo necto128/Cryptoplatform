@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.crypto_platform.view.order import CreateStaticBuyOrderView, CreateStaticSellOrderView
-from apps.crypto_platform.view.view_subscription import SubscriptionDirectiveView
+from apps.crypto_platform.view.subscription import SubscriptionDirectiveView
 
 urlpatterns = [
     path("create-order-buy/", CreateStaticBuyOrderView.as_view(), name="order-static"),

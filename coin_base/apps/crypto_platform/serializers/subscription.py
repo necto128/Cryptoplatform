@@ -20,7 +20,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta options for SubscriptionSerializer."""
         model = Directive
-        fields = ['symbol', 'price24h', 'last_price']
+        fields = ['key', 'symbol', 'price24h', 'last_price']
 
     def get_last_price(self, obj):
         """Retrieve the last price entry for the given directive."""
@@ -30,8 +30,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         return None
 
 
-class CreateSubscriptionSerializer(serializers.Serializer):
-    """Serializer for creating subscriptions."""
-    subscription = serializers.ListField(
-        child=serializers.IntegerField()
+class ListSubscriptionSerializer(serializers.Serializer):
+    """Serializer for subscriptions."""
+    subscription = serializers.PrimaryKeyRelatedField(
+        queryset=Directive.objects.all(),
+        many=True
     )

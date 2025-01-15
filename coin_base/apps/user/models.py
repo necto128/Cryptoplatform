@@ -19,17 +19,24 @@ class Subscription(models.Model):
         """Meta Option."""
         unique_together = ('user', 'directive')
 
-    def create_subscribe(self, directive):
+    @classmethod
+    def create_subscribe(cls, user, directive):
         """Subscribe to cryptocurrency."""
-        Subscription.objects.get_or_create(user=self, directive=directive)
+        for coin_id in directive:
+            Subscription.objects.get_or_create(
+                user=user,
+                directive=Directive.objects.get(key=coin_id)
+            )
 
-    def unsubscribe(self, directive):
+    @classmethod
+    def unsubscribe(cls, user, directive):
         """Unsubscribe from cryptocurrencies."""
-        Subscription.objects.filter(user=self, directive__in=directive).delete()
+        Subscription.objects.filter(user=user.profile, directive__key__in=directive).delete()
 
-    def get_subscriptions(self):
+    @classmethod
+    def get_subscriptions(cls, user):
         """Get all user subscriptions."""
-        return self.subscriptions.all()
+        return user.profile.subscriptions.all()
 
 
 class CryptoWallet(models.Model):
