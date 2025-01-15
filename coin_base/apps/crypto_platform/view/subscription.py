@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.crypto_platform.serializers.subscription import SubscriptionSerializer, CreateSubscriptionSerializer
+from apps.crypto_platform.serializers.subscription import SubscriptionSerializer, ListSubscriptionSerializer
+from apps.user.models import Subscription
 
 
 class SubscriptionDirectiveView(APIView):
@@ -18,10 +19,10 @@ class SubscriptionDirectiveView(APIView):
     )
     def post(self, request):
         """Create subscription on directive."""
-        data, user = request.data, request.user
-        serializer = CreateSubscriptionSerializer(data=data)
+        data, user = request.data, request.user.profile
+        serializer = ListSubscriptionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        user.subscriptions.create_subscribe(serializer.data)
+        Subscription.create_subscribe(user, serializer.data["subscription"])
         return Response(
             status=status.HTTP_201_CREATED,
             data={"Message": "Successfully subscription!"}
@@ -35,9 +36,9 @@ class SubscriptionDirectiveView(APIView):
     def delete(self, request):
         """Delete subscription on directive."""
         data, user = request.data, request.user
-        serializer = SubscriptionSerializer(data=data)
+        serializer = ListSubscriptionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        user.subscriptions.unsubscribe(serializer.data)
+        Subscription.unsubscribe(user, serializer.data["subscription"])
         return Response(
             status=status.HTTP_200_OK,
             data={"Message": "Successfully unsubscription!"}
@@ -51,7 +52,7 @@ class SubscriptionDirectiveView(APIView):
     def get(self, request):
         """Create subscription on directive."""
         user = request.user
-        list_subscriptions = user.subscriptions.get_subscriptions()
+        list_subscriptions = Subscription.get_subscriptions(user)
         directives = [sub.directive for sub in list_subscriptions]
         serializer = SubscriptionSerializer(directives, many=True)
         return Response(
