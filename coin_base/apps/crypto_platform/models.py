@@ -1,4 +1,5 @@
 from django.db import models
+
 from apps.coin.models import Directive
 
 
@@ -19,14 +20,14 @@ class Order(models.Model):
 
 class OrderBook(models.Model):
     """Represents a collection of orders for a specific currency."""
-    currency = models.ForeignKey(Directive, on_delete=models.CASCADE, related_name='order_books')
+    currency = models.ForeignKey(Directive, on_delete=models.DO_NOTHING, related_name='order_books')
     orders = models.ManyToManyField(Order, related_name='order_books')
 
 
 class Transaction(models.Model):
     """Represents a completed transaction between a buy order and a sell order."""
-    buy_order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='buy_transactions')
-    sell_order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='sell_transactions')
+    buy_order = models.ForeignKey(Order, on_delete=models.DO_NOTHING, related_name='buy_transactions')
+    sell_order = models.ForeignKey(Order, on_delete=models.DO_NOTHING, related_name='sell_transactions')
     price = models.DecimalField(max_digits=20, decimal_places=8)
     amount = models.DecimalField(max_digits=20, decimal_places=8)
     created_at = models.DateTimeField(auto_now_add=True)
