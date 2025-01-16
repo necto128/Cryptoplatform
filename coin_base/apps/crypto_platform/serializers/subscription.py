@@ -36,3 +36,21 @@ class ListSubscriptionSerializer(serializers.Serializer):
         queryset=Directive.objects.all(),
         many=True
     )
+
+
+class DirectiveSerializer(serializers.ModelSerializer):
+    """Serializer for Directive model to include subscription information."""
+
+    last_price = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta options for SubscriptionSerializer."""
+        model = Directive
+        fields = ['key', 'symbol', 'price24h', 'last_price']
+
+    def get_last_price(self, obj):
+        """Retrieve the last price entry for the given directive."""
+        last_price_entry = obj.price_history.order_by('-timestamp').first()
+        if last_price_entry:
+            return PriceHistorySerializer(last_price_entry).data
+        return None
