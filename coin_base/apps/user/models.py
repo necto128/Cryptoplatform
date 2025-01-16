@@ -33,8 +33,8 @@ class Subscription(models.Model):
         """Unsubscribe from cryptocurrencies."""
         Subscription.objects.filter(user=user.profile, directive__key__in=directive).delete()
 
-    @classmethod
-    def get_subscriptions(cls, user):
+    @staticmethod
+    def get_subscriptions(user):
         """Get all user subscriptions."""
         return user.profile.subscriptions.all()
 
