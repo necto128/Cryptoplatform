@@ -4,7 +4,7 @@ repos:
       - id: ruff
         name: ruff
         description: "Run 'ruff' for extremely fast Python linting"
-        entry: ruff check --force-exclude "migrations/*"
+        entry: ruff check --exclude "**/migrations/*"
         language: python
         types_or: [ python, pyi, jupyter ]
         args: [ ]
