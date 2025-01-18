@@ -1,5 +1,4 @@
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
@@ -8,6 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.permissions import IsUser
+from apps.user.models import User
 from apps.user.serializers.user import UserSerializer, UserPasswordSerializer
 from apps.user.tasks import send_password_reset_email_celery_task
 from apps.utils import generate_password
@@ -17,6 +18,7 @@ from config.celery import app
 
 class RegisterView(APIView):
     """View for user registration."""
+
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(tags=['User'])
@@ -32,7 +34,8 @@ class RegisterView(APIView):
 
 class EditPasswordView(APIView):
     """Views for editing user password."""
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes = [permissions.IsAuthenticated, IsUser]
 
     @swagger_auto_schema(tags=['User'])
     def patch(self, request):
@@ -48,16 +51,17 @@ class EditPasswordView(APIView):
             return Response({"Error": e}, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(request.data["password"])
         user.save()
-        return Response(status=status.HTTP_201_CREATED, data={"Message": "Successfully registered!"})
+        return Response(status=status.HTTP_200_OK, data={"Message": "Successfully!"})
 
 
 class DropPasswordView(APIView):
     """Views for drop user password."""
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes = [permissions.IsAuthenticated, IsUser]
 
     @swagger_auto_schema(tags=['User'])
     def post(self, request):
-        """Views for drop user password."""
+        """Drop user password."""
         user = request.user
         ping_celery_redis(app)
         passw = generate_password()

@@ -10,7 +10,7 @@ class WorkingOrder:
     def __init__(self, data, user):
         """WorkingOrder services initialization."""
         self.user = user
-        self.id_currency = data["id_currency"]
+        self.id_currency = data["currency"]
         self.order_type = data["order_type"]
         self.amount = data["amount"]
         self.currency = None
@@ -35,7 +35,7 @@ class WorkingOrder:
 
     def main_block(self):
         """Block get wallet and user."""
-        self.user_wallet = self.user.profile.wallets
+        self.user_wallet = self.user.wallets
         self.main_currency = self.user_wallet.balances.filter(currency__key__in=[self.id_currency, 825])
         self.usdt = self.main_currency.filter(currency__key=825).first()
         self.working_currency = self.main_currency.filter(currency__key=self.id_currency).first()
@@ -62,7 +62,7 @@ class WorkingOrder:
 
     def get_wallet(self):
         """Block get wallet user."""
-        self.user_wallet = self.user.profile.wallets
+        self.user_wallet = self.user.wallets
         self.user_balance = self.user_wallet.balances.get(currency__symbol="USDT")
         self.price_amount_currency = self.amount * self.last_price
 
@@ -81,6 +81,7 @@ class WorkingOrder:
             wallet=self.user_wallet,
             amount=self.amount,
             price=self.last_price,
+            status="close"
         )
         order_book.orders.add(self.order)
 

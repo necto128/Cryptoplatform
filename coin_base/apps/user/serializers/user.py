@@ -1,16 +1,18 @@
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth.models import User
+from apps.user.models import User
 from rest_framework import serializers
 
 
 class UserSerializer(ModelSerializer):
     """Serializer for user objects."""
+
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
         """Meta Option."""
+
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
+        fields = ['email', 'password', 'confirm_password']
 
     def validate(self, attrs):
         """Validate Option."""
@@ -24,6 +26,7 @@ class UserSerializer(ModelSerializer):
 
 class UserPasswordSerializer(serializers.Serializer):
     """Serializer for user password."""
+
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
     current_password = serializers.CharField(write_only=True)

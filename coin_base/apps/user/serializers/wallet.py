@@ -5,10 +5,12 @@ from apps.user.models import WalletBalance, CryptoWallet
 
 class WalletBalanceSerializer(serializers.ModelSerializer):
     """Wallet balance serializer."""
+
     symbol = serializers.SerializerMethodField()
 
     class Meta:
         """Meta Option."""
+
         model = WalletBalance
         fields = ['balance', 'symbol']
 
@@ -22,6 +24,7 @@ class CryptoWalletSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Meta Option."""
+
         model = CryptoWallet
         fields = ['address']
 

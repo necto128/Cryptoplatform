@@ -4,12 +4,15 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.crypto_platform.serializers.order import StaticOrderSerializer
 from apps.crypto_platform.services import WorkingOrder
+from apps.permissions import IsUser
 
 
 class CreateStaticBuyOrderView(APIView):
     """View for create order buy."""
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes = [permissions.IsAuthenticated, IsUser]
 
     @swagger_auto_schema(
         tags=['Order-static'],
@@ -18,8 +21,9 @@ class CreateStaticBuyOrderView(APIView):
     )
     def post(self, request):
         """Create static orders for users."""
-        data = request.data
-        user = request.user
+        data, user = request.data, request.user
+        serializers = StaticOrderSerializer(data=data)
+        serializers.is_valid(raise_exception=True)
         if data["order_type"] == "buy":
             services = WorkingOrder(data, user)
             services.get_currency()
@@ -42,7 +46,8 @@ class CreateStaticBuyOrderView(APIView):
 
 class CreateStaticSellOrderView(APIView):
     """View for create order sell."""
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes = [permissions.IsAuthenticated, IsUser]
 
     @swagger_auto_schema(tags=['Order-static'],
                          operation_description="Order on sell",
@@ -50,8 +55,9 @@ class CreateStaticSellOrderView(APIView):
                          )
     def post(self, request):
         """Create static orders for users."""
-        data = request.data
-        user = request.user
+        data, user = request.data, request.user
+        serializers = StaticOrderSerializer(data=data)
+        serializers.is_valid(raise_exception=True)
         if data["order_type"] == "sell":
             services = WorkingOrder(data, user)
             services.get_currency()

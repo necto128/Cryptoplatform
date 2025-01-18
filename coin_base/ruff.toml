@@ -18,4 +18,4 @@ extend-select = [
 ignore = ["D100", "I001","D104", "S101"]
 
 [lint.pydocstyle]
-convention = "google"
+convention = "pep257"

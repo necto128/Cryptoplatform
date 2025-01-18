@@ -11,6 +11,7 @@ from apps.crypto_platform.serializers.coin import PriceHistorySerializer
 
 class HistoryCryptView(APIView):
     """View for get history crypt."""
+
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(

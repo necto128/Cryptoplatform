@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import (
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     """Class CustomTokenObtainPairView."""
+
     @swagger_auto_schema(tags=['Authentication'])
     def post(self, request, *args, **kwargs):
         """View for obtaining a pair of access and refresh tokens."""
@@ -17,6 +18,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class CustomTokenVerifyView(TokenVerifyView):
     """Class CustomTokenVerifyView."""
+
     @swagger_auto_schema(tags=['Authentication'])
     def post(self, request, *args, **kwargs):
         """View for verifying a given access token."""
@@ -25,6 +27,7 @@ class CustomTokenVerifyView(TokenVerifyView):
 
 class CustomTokenRefreshView(TokenRefreshView):
     """Class CustomTokenRefreshView."""
+
     @swagger_auto_schema(tags=['Authentication'])
     def post(self, request, *args, **kwargs):
         """View for refreshing an access token using a refresh token."""
@@ -33,6 +36,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class CustomTokenBlacklistView(TokenBlacklistView):
     """Class CustomTokenBlacklistView."""
+
     @swagger_auto_schema(tags=['Authentication'])
     def post(self, request, *args, **kwargs):
         """View for blacklisting a refresh token."""

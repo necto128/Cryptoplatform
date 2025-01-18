@@ -1,8 +1,8 @@
 from django.urls import path
 
 from apps.user.view.transaction import TransactionHistoryView, OrderHistoryView
-from apps.user.view.user_view import RegisterView, EditPasswordView, DropPasswordView
-from apps.user.view.wallet_view import BalanceView
+from apps.user.view.user import RegisterView, EditPasswordView, DropPasswordView
+from apps.user.view.wallet import BalanceView
 
 urlpatterns = [
     path("register-user/", RegisterView.as_view(), name="register"),
