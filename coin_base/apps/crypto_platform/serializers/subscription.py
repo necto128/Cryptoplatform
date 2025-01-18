@@ -8,6 +8,7 @@ class PriceHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         """Meta options for PriceHistorySerializer."""
+
         model = PriceHistory
         fields = ['value', 'timestamp']
 
@@ -19,6 +20,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Meta options for SubscriptionSerializer."""
+
         model = Directive
         fields = ['key', 'symbol', 'price24h', 'last_price']
 
@@ -32,6 +34,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 class ListSubscriptionSerializer(serializers.Serializer):
     """Serializer for subscriptions."""
+
     subscription = serializers.PrimaryKeyRelatedField(
         queryset=Directive.objects.all(),
         many=True

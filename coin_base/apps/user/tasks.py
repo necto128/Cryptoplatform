@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from apps.user.email import send_password_reset_email
+from apps.user.send_email import send_password_reset_email
 
 
 @shared_task

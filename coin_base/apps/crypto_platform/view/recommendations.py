@@ -10,6 +10,7 @@ from apps.crypto_platform.serializers.subscription import SubscriptionSerializer
 
 class RecommendationsView(APIView):
     """View for Subscription Directive."""
+
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(

@@ -5,12 +5,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.crypto_platform.serializers.subscription import SubscriptionSerializer, ListSubscriptionSerializer
+from apps.permissions import IsUser
 from apps.user.models import Subscription
 
 
 class SubscriptionDirectiveView(APIView):
     """View for Subscription Directive."""
-    permission_classes = [permissions.IsAuthenticated]
+
+    permission_classes = [permissions.IsAuthenticated, IsUser]
 
     @swagger_auto_schema(
         tags=['Subscription'],
@@ -19,7 +21,7 @@ class SubscriptionDirectiveView(APIView):
     )
     def post(self, request):
         """Create subscription on directive."""
-        data, user = request.data, request.user.profile
+        data, user = request.data, request.user
         serializer = ListSubscriptionSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         Subscription.create_subscribe(user, serializer.data["subscription"])

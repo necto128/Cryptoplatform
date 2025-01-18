@@ -7,6 +7,7 @@ from django.db.models import Q
 
 class Order(models.Model):
     """Represents a trading order for buying or selling a specific currency."""
+
     ORDER_TYPE_CHOICES = [
         ('buy', 'Buy'),
         ('sell', 'Sell'),
@@ -27,12 +28,14 @@ class Order(models.Model):
 
 class OrderBook(models.Model):
     """Represents a collection of orders for a specific currency."""
+
     currency = models.ForeignKey(Directive, on_delete=models.DO_NOTHING, related_name='order_books')
     orders = models.ManyToManyField(Order, related_name='order_books', blank=True)
 
 
 class Transaction(models.Model):
     """Represents a completed transaction between a buy order and a sell order."""
+
     buy_order = models.ForeignKey(
         Order, on_delete=models.DO_NOTHING, related_name='buy_transactions', blank=True, null=True)
     sell_order = models.ForeignKey(
@@ -43,7 +46,7 @@ class Transaction(models.Model):
 
     @staticmethod
     def get_user_transactions(wallet):
-        """Method for get list transactions."""
+        """Get the list of user transactions."""
         return Transaction.objects.filter(
             Q(buy_order__wallet=wallet) | Q(sell_order__wallet=wallet)
         )

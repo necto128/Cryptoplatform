@@ -3,7 +3,11 @@ from passlib.pwd import genword
 
 
 def ping_celery_redis(app):
-    """Checking if a celery + redis connection is active."""
+    """
+    Check if a celery + redis connection is active.
+
+    Open function.
+    """
     # Get status - Celery worker
     app_celery = app.control
     celery_status = app_celery.ping()

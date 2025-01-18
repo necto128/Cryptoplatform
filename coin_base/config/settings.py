@@ -14,7 +14,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 CORS_ALLOW_ALL_ORIGINS = True
 SECRET_KEY = os.getenv("SECRET_KEY")
-# DEBUG = os.getenv("DEBUG") and True
+AUTH_USER_MODEL = "user.User"
 
 DEBUG = os.getenv("DEBUG")
 LANGUAGE_CODE = "en-us"

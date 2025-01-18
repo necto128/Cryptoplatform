@@ -2,9 +2,11 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
+from apps.user.models import User
+
 
 def send_password_reset_email(user: int, password: str):
-    """Sends a password reset email to the user."""
+    """Send a password reset email to the user."""
     mail_subject = "DROP PASSWORD"
     message = render_to_string(
         "reset-password-confirm.html",
@@ -13,7 +15,8 @@ def send_password_reset_email(user: int, password: str):
             "password": password
         },
     )
-    to_email = "pamgame1212@mail.ru"
+
+    to_email = User.objects.get(id=user).email
     is_sent = send_mail(
         mail_subject,
         message,

@@ -8,5 +8,6 @@ class PriceHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         """Meta options."""
+
         model = PriceHistory
         fields = ['value', 'timestamp']

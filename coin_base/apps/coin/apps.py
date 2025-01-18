@@ -5,7 +5,8 @@ from apps.coin.kafka import consume_messages
 
 
 class CoinConfig(AppConfig):
-    """CoinConfig."""
+    """Coin Config."""
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.coin"
 
