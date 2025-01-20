@@ -1,5 +1,5 @@
-from django.contrib import admin
+from apps.api.admin import admin_site
 from apps.coin.models import Directive, PriceHistory
 
-admin.site.register(Directive)
-admin.site.register(PriceHistory)
+admin_site.register(Directive)
+admin_site.register(PriceHistory)

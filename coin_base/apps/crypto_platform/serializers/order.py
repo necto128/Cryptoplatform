@@ -15,7 +15,14 @@ class OrderSerializer(serializers.ModelSerializer):
         """Meta options."""
 
         model = Order
-        fields = ["order_type", "currency", "amount", "price", "created_at", "wallet"]
+        fields = [
+            "order_type",
+            "currency",
+            "amount",
+            "price",
+            "created_at",
+            "wallet"
+        ]
 
 
 class StaticOrderSerializer(serializers.ModelSerializer):
@@ -25,7 +32,11 @@ class StaticOrderSerializer(serializers.ModelSerializer):
         """Meta options."""
 
         model = Order
-        fields = ["order_type", "currency", "amount"]
+        fields = [
+            "order_type",
+            "currency",
+            "amount"
+        ]
 
     def validate(self, attrs):
         """Check if the associated Directive is active."""
@@ -34,3 +45,40 @@ class StaticOrderSerializer(serializers.ModelSerializer):
         if directive and not directive.is_active:
             raise ValidationError('The associated Directive is not active.')
         return attrs
+
+
+class OrderAdminSerializer(serializers.ModelSerializer):
+    """Serializer for Order model."""
+
+    wallet = CryptoWalletSerializer()
+
+    class Meta:
+        """Meta options."""
+
+        model = Order
+        fields = [
+            "id",
+            "order_type",
+            "currency",
+            "amount",
+            "price",
+            "created_at",
+            "wallet",
+            "status"
+        ]
+
+
+class OrderEditAdminSerializer(serializers.ModelSerializer):
+    """Serializer for Order model."""
+
+    class Meta:
+        """Meta options."""
+
+        model = Order
+        fields = [
+            "id",
+            "currency",
+            "amount",
+            "price",
+            "status"
+        ]
