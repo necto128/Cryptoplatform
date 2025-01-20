@@ -131,7 +131,7 @@ class AdminUserManagementView(APIView):
     def get(self, request):
         """View for get list of user."""
         try:
-            list_directive = User.objects.filter(type_of_user="admin")  # поменятььььь
+            list_directive = User.objects.filter(type_of_user="user")
             serializer = UserListSerializer(list_directive, many=True).data
             return Response(
                 status=status.HTTP_200_OK,
@@ -164,7 +164,7 @@ class AdminUserManagementView(APIView):
         operation_description="Choice active user",
         operation_summary="Choice active user"
     )
-    def patch(self, request):  # блокуировка пользователя
+    def patch(self, request):
         """View for choice active user."""
         data = request.data
         user = get_object_or_404(User, id=data["user_id"])
