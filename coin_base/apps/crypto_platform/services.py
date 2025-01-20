@@ -1,6 +1,14 @@
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.response import Response
+
 from apps.coin.models import Directive
 from apps.crypto_platform.models import OrderBook, Order
 from apps.crypto_platform.models import Transaction
+from apps.crypto_platform.serializers.order import OrderAdminSerializer
+from apps.crypto_platform.serializers.transaction import TransactionSerializer
+from apps.crypto_platform.serializers.user import UserListSerializer
+from apps.user.models import User
 from apps.user.models import WalletBalance
 
 
@@ -100,3 +108,54 @@ class WorkingOrder:
             price=self.order.price,
             amount=self.amount
         )
+
+
+class AdministrationWork:
+    """Class for working with Administration func."""
+
+    @staticmethod
+    def get_list_orders():
+        """Return list all orders."""
+        try:
+            list_order = Order.objects.all()
+            serializer = OrderAdminSerializer(list_order, many=True).data
+            return Response(
+                status=status.HTTP_200_OK,
+                data=serializer
+            )
+        except Exception:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @staticmethod
+    def get_list_user():
+        """Return list all user."""
+        try:
+            list_directive = User.objects.filter(type_of_user="user")
+            serializer = UserListSerializer(list_directive, many=True).data
+            return Response(
+                status=status.HTTP_200_OK,
+                data=serializer
+            )
+        except Exception:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @staticmethod
+    def get_list_transactions_user(user_id: int):
+        """"Return a list of all transaction user."""
+        user = get_object_or_404(User, id=user_id)
+        try:
+            wallet = user.wallets
+            list_transaction = Transaction.get_user_transactions(wallet)
+            serializer = TransactionSerializer(list_transaction, many=True)
+            return Response(
+                status=status.HTTP_200_OK,
+                data=serializer.data
+            )
+        except Exception:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST
+            )

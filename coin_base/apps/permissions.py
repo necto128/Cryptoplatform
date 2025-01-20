@@ -35,18 +35,18 @@ class IsAdmin(BasePermission):
         )
 
 
-class IsAnalyst(BasePermission):
+class IsAnalytic(BasePermission):
     """
-    Permission check for analyst users.
+    Permission check for analytic users.
 
-    Allows access only to analyst users.
+    Allows access only to analytic users.
     """
 
     def has_permission(self, request, view):
-        """Check if the currently authenticated user is an analyst."""
+        """Check if the currently authenticated user is an analytic."""
         user = request.user
         return bool(
-            user.type_of_user == "analyst"
+            user.type_of_user == "analytic"
             and user.is_active
             and user.is_authenticated
         )

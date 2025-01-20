@@ -38,7 +38,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     TYPE_OF_USER_CHOICES = (
         ("user", "User"),
         ("admin", "Admin"),
-        ("analyst", "Analyst")
+        ("analytic", "Analytic")
     )
 
     type_of_user = models.CharField(max_length=8, choices=TYPE_OF_USER_CHOICES, default="user")

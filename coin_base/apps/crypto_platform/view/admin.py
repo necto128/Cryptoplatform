@@ -58,8 +58,8 @@ class AdminGetOrderCryptView(APIView):
 
     @swagger_auto_schema(
         tags=['Administrator'],
-        operation_description="Get list of crypt",
-        operation_summary="Get list of crypt"
+        operation_description="Get list of order",
+        operation_summary="Get list of order"
     )
     def get(self, request):
         """View for get list of order."""
