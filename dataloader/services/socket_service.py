@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import websockets
@@ -6,7 +7,8 @@ from resource.websocket_resource import WebSocketResource
 import pandas as pd
 from dotenv import load_dotenv
 import os
-
+from aiokafka.errors import KafkaConnectionError
+import logging
 load_dotenv()
 
 
@@ -35,18 +37,26 @@ async def crypto_websocket():
         value_serializer=lambda v: json.dumps(v).encode('utf-8')
     )
     await producer.start()
-    async with websockets.connect(WebSocketResource.WS_CRYPTO) as websocket:
-        await websocket.send(json.dumps(WebSocketResource.message_call_5s_normal))
-        record_list = []
-        while True:
-            try:
-                message = await websocket.recv()
-                message_data = json.loads(message).get("d")
-                if message_data:
-                    record_list.append(message_data)
-                    if len(record_list) >= 100:
-                        await teke_crypto(producer, record_list)
-                        record_list.clear()
-            except websockets.ConnectionClosed:
-                await producer.stop()
-                break
+    while True:
+        try:
+            async with websockets.connect(WebSocketResource.WS_CRYPTO) as websocket:
+                await websocket.send(json.dumps(WebSocketResource.message_call_5s_normal))
+                record_list = []
+                while True:
+                    try:
+                        message = await websocket.recv()
+                        message_data = json.loads(message).get("d")
+                        if message_data:
+                            record_list.append(message_data)
+                            if len(record_list) >= 100:
+                                await teke_crypto(producer, record_list)
+                                record_list.clear()
+                    except websockets.ConnectionClosed:
+                        logging.info("wait message ...")
+                        await asyncio.sleep(10)
+        except KafkaConnectionError:
+            logging.info("Kafka Connection ...")
+            await asyncio.sleep(10)
+        except Exception:
+            logging.info("Websockets connect ...")
+    await producer.stop()

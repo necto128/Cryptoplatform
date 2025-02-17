@@ -1,0 +1,91 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: base
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    restart: always
+
+  coinbase:
+    build:
+      context: .
+      dockerfile: Dockerfile_coin_base
+    command: uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --reload
+    environment:
+        DB_HOST: db
+        DB_PORT: 5432
+        KAFKA_HOST: kafka
+        KAFKA_PORT: 9092
+    volumes:
+      - ./coin_base:/app
+    depends_on:
+      - db
+      - dataloader
+      - celery_worker
+
+  dataloader:
+    build:
+      context: .
+      dockerfile: Dockerfile_dataloader
+    environment:
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+    volumes:
+      - ./dataloader:/app
+    ports:
+      - "8002:8000"
+    depends_on:
+      - kafka
+    restart: always
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile_coin_base
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - ./coin_base:/app
+    depends_on:
+      - redis
+    restart: always
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: "my_topic:2:2"
+    ports:
+      - "29092:29092"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - coinbase

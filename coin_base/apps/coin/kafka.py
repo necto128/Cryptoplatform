@@ -24,7 +24,7 @@ async def consume_messages():
             await consumer.start()  # Try to connect
             break
         except KafkaConnectionError:
-            await asyncio.sleep(60)
+            await asyncio.sleep(30)
 
     try:
         while True:
